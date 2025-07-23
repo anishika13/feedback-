@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin – Feedback Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d);
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f2f2f2;
+    }
+
+    .back {
+      display: block;
+      margin: 30px auto 0;
+      width: fit-content;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+
+    .back:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>All Submitted Feedbacks</h1>
+  <table id="feedbackTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <a href="/" class="back">⬅ Back to Form</a>
+
+  <script>
+    fetch("/api/feedback")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#feedbackTable tbody");
+        data.forEach(fb => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${fb.name}</td>
+            <td>${fb.email}</td>
+            <td>${fb.message}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(err => {
+        alert("⚠️ Failed to load feedbacks");
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
